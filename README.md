@@ -1,6 +1,6 @@
 # My Arch Installation
 ## Steps
-1. Download the iso file and the signature to verify it
+1. Download the iso file and the signature to verify it, download it from torrent in my case
     + iso file https://archlinux.org/download/
     + sha256sums.txt
     + b2sums.txt
