@@ -31,14 +31,165 @@ cfdisk
 EFI 512MB
 SWAPON 16GB
 ROOT
+cryptsetup -y -v luksFormat --pbkdf pbkdf2 /dev/sda3
+cryptsetup open /dev/sda3 root
 mkfs.ext4 /dev/sda3
 mkswap /dev/sda2
 mkfs.fat -F 32 /dev/sda1
 mount /dev/sda3 /mnt
-mount --mkdir /dev/sda1 /mnt/boot
+mkdir /mnt/boot
+mkdir /mnt/boot/efi
+mount /dev/sda1 /mnt/boot/efi
 swapon /dev/sda2
 reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-pacstrap -K /mnt base linux linux-firmware
+pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g nvim networkmanager base-devel sudo 
+genfstab -U /mnt >> /mnt/etc/fstab (check if it generated correctly)
+arch-chroot /mnt
+ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
+hwclock --systohc
+nvim /etc/locale.gen (setear idioma)
+locale-gen (setear idioma)
+
+If you set the console keyboard layout, make the changes persistent in vconsole.conf(5):
+nvim /etc/vconsole.conf
+KEYMAP=de-latin1 (for example)
+
+nvim /etc/hosts
+127.0.0.1        localhost
+::1              localhost
+127.0.1.1        hp-elitebook-745-g2
+
+nvim /etc/hostname 
+#escribir el nombre de la pc, hp-elitebook-745-g2
+
+nvim /etc/locale.conf  
+#LANG=en_US.UTF-8
+
+systemctl enable NetworkManager
+passwd
+useradd -m -G wheel mxsatworld
+passwd mxsatworld
+
+nvim /etc/sudoers 
+#uncomment
+#%wheel ALL=(ALL) ALL
+
+pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
+
+#add key to unlock disk when boot is unlocked 
+dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock
+chmod 000 /root/cryptlvm.keyfile
+cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile
+
+vim /etc/mkinitcpio.conf 
+#despues del hook autodetect poner "keyboard keymap" 
+#antes de filesystems poner hook encrypt 
+#FILES=(/root/cryptlvm.keyfile) 
+chmod 600 /boot/initramfs-linux* 
+mkinitcpio -p linux 
+blkid >> uuid
+#copy UUID of /dev/sda3 
+vim uuid 
+rm uuid
+vim /etc/default/grub 
+#enable cryptodisk 
+GRUB_CMDLINE_LINUX="cryptdevice=UUID=<uuid copypasteada>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile" 
+#instalar grub
+grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi
+#generate config file
+grub-mkconfig -o /boot/grub/grub.cfg 
+exit
+umount -a
+reboot   
+
+#cambiar path bios \EFI\grub\grubx64.efi (F9 boot from EFI file)
+#drivers wifi 
+sudo pacman -S broadcom-wl 
+#funciones para manejar wifi
+vim ~/.bashrc
+function wifiList() {
+    nmcli dev wifi list 
+} 
+function wifiConnect() {
+	sudo nmcli --ask dev wifi connect "$1"
+}
+function wifiDisconnect(){
+        nmcli con down "$1" 
+} 
+#reiniciar para poder usar los drivers 
+reboot 
+#instalar e iniciar i3 y emulador terminal 
+sudo pacman -S xorg xorg-xinit i3 xfce4-terminal
+vim ~/.xinitrc 
+#exec i3
+startx
+sudo pacman -S firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip git maim libreoffice
+alsamixer
+#desmutear todos los canales, puede ser necesario reiniciar para que los cambios hagan efecto 
+#EN CASO DE QUE HAYA PROBLEMAS DE AUDIO DEFINIR TARJETA DE SONIDO DEFAULT O INVESTIGAR COMO
+#INICIALIZAR EL SERVICIO SND-PCM-OSS AL INICIO DEL SISTEMA (HACER ESTO SOLO DE SER NECESARIO) 
+aplay -l 
+#ver cual es el nombre de la tarjeta de sonido, en mi caso se llama Generic
+vim ~/.asoundrc
+pcm.!default {
+   type hw
+   card Generic
+}
+
+ctl.!default {
+   type hw
+   card Generic
+}
+reboot 
+~/.config/i3/config
+#personal commands
+bindsym ctrl+Shift+Return exec xfce4-terminal -e htop
+bindsym ctrl+Shift+l exec i3lock
+exec_always setxkbmap -layout us -variant altgr-intl
+bindsym XF86MonBrightnessDown exec brightnessctl set 1%-
+bindsym XF86MonBrightnessUp exec brightnessctl set +1% 
+#screenshots
+bindsym ctrl+Shift+r exec maim -s | xclip -selection clipboard -t image/png
+#resolution of pop ups and floating windows
+floating_minimum_size 75 x 50
+floating_maximum_size 400 x 300 
+#end personal commands 
+~/.config/i3status/config 
+general {
+        colors = true
+        interval = 5
+}
+
+order += "wireless _first_"
+order += "ethernet _first_"
+order += "battery all"
+order += "memory"
+order += "tztime local"
+
+wireless _first_ {
+        format_up = "Wi-fi signal: (%quality at %essid) "
+        format_down = "Wi-fi signal: down"
+}
+
+ethernet _first_ {
+        format_up = "Ethernet: up (%speed)"
+        format_down = "Ethernet: down"
+}
+
+battery all {
+        format = "BATERY %status %percentage %remaining"
+}
+memory {
+        format = "in use RAM %used | available RAM %available"
+        threshold_degraded = "1G"
+        format_degraded = "MEMORY < %available"
+}
+
+tztime local {
+        format = "%a %d/%m/%Y %H:%M"
+} 
+
+sudo pacman -S lxappearance arc-gtk-theme
 
 ## Sources
 1. archlinux.org
