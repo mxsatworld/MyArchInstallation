@@ -207,3 +207,5 @@ sudo pacman -S lxappearance arc-gtk-theme
 11. http://keys.gnupg.net
 12. https://pgp.mit.edu
 13. https://keyoxide.org
+14. https://www.youtube.com/watch?v=XNJ4oKla8B0 
+15. https://www.freecodecamp.org/news/how-to-install-arch-linux/
