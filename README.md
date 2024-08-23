@@ -24,9 +24,6 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 6. burn the ISO to a usb and boot it
     + lsblk (to see the name of the usb)
     + sudo dd if=archlinux-2024.08.01-x86_64.iso of=/dev/sde bs=16M oflag=direct status=progress
-7. Once booted see available keymaps with the first command and use the second to set it
-    + localectl list-keymaps
-    + loadkeys <keymap>
 8. connect to the internet (im using my cellphone because arch doesnt recognize my wifi cards)
 timedatectl set-timezone America/Argentina/Buenos_Aires
 cfdisk 
