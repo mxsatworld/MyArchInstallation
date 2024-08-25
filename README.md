@@ -182,7 +182,7 @@ tztime local {
 
 sudo pacman -S lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth
 systemctl enable bluetooth
-
+###
 ## Sources
 1. archlinux.org
 2. wiki.archlinux.org
