@@ -41,27 +41,23 @@ mkdir /mnt/boot/efi
 mount /dev/sda1 /mnt/boot/efi
 swapon /dev/sda2
 reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g nvim networkmanager base-devel sudo 
+pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g vim networkmanager base-devel sudo linux-zen-headers
 genfstab -U /mnt >> /mnt/etc/fstab (check if it generated correctly)
 arch-chroot /mnt
 ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
 hwclock --systohc
-nvim /etc/locale.gen (setear idioma)
+vim /etc/locale.gen (setear idioma)
 locale-gen (setear idioma)
 
-If you set the console keyboard layout, make the changes persistent in vconsole.conf(5):
-nvim /etc/vconsole.conf
-KEYMAP=de-latin1 (for example)
-
-nvim /etc/hosts
+vim /etc/hosts
 127.0.0.1        localhost
 ::1              localhost
 127.0.1.1        hp-elitebook-745-g2
 
-nvim /etc/hostname 
+vim /etc/hostname 
 #escribir el nombre de la pc, hp-elitebook-745-g2
 
-nvim /etc/locale.conf  
+vim /etc/locale.conf  
 #LANG=en_US.UTF-8
 
 systemctl enable NetworkManager
@@ -69,7 +65,7 @@ passwd
 useradd -m -G wheel mxsatworld
 passwd mxsatworld
 
-nvim /etc/sudoers 
+vim /etc/sudoers 
 #uncomment
 #%wheel ALL=(ALL) ALL
 
@@ -85,7 +81,7 @@ vim /etc/mkinitcpio.conf
 #antes de filesystems poner hook encrypt 
 #FILES=(/root/cryptlvm.keyfile) 
 chmod 600 /boot/initramfs-linux* 
-mkinitcpio -p linux 
+mkinitcpio -p linux-zen 
 blkid >> uuid
 #copy UUID of /dev/sda3 
 vim uuid 
@@ -103,7 +99,7 @@ reboot
 
 #cambiar path bios \EFI\grub\grubx64.efi (F9 boot from EFI file)
 #drivers wifi 
-sudo pacman -S broadcom-wl 
+sudo pacman -S broadcom-wl-dkms
 #funciones para manejar wifi
 vim ~/.bashrc
 function wifiList() {
