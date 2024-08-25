@@ -43,8 +43,8 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 21. reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 22. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g vim networkmanager base-devel sudo linux-zen-headers
 23. genfstab -U /mnt >> /mnt/etc/fstab 
-    +vim /mnt/etc/fstab
-    +(check if it generated correctly)
+    + vim /mnt/etc/fstab
+    + (check if it generated correctly)
 24. arch-chroot /mnt
 25. ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
 26. hwclock --systohc
@@ -57,38 +57,38 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 30. vim /etc/hostname 
     + hp-elitebook-745-g2
 31. vim /etc/locale.conf  
-    +LANG=en_US.UTF-8
+    + LANG=en_US.UTF-8
 32. systemctl enable NetworkManager
 33. passwd
 34. useradd -m -G wheel mxsatworld
 35. passwd mxsatworld
 36. vim /etc/sudoers 
-    +#uncomment
-    +#%wheel ALL=(ALL) ALL
+    + uncomment
+    + %wheel ALL=(ALL) ALL
 37. pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
-38. dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock
-    +add key to unlock disk when boot is unlocked 
-    +chmod 000 /root/cryptlvm.keyfile
-    +cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile
+38. add key to unlock disk when boot is unlocked 
+    + dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock
+    + chmod 000 /root/cryptlvm.keyfile
+    + cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile
 39. vim /etc/mkinitcpio.conf 
-    +despues del hook autodetect poner "keyboard keymap" 
-    +antes de filesystems poner hook encrypt 
-    +FILES=(/root/cryptlvm.keyfile) 
+    + after the autodetect hook put "keyboard keymap" hooks 
+    + before filesystems hook put encrypt hook
+    + FILES=(/root/cryptlvm.keyfile) 
 40. chmod 600 /boot/initramfs-linux* 
 41. mkinitcpio -p linux-zen 
 42. blkid >> uuid
-    +copy UUID of /dev/sda3 
+    + copy UUID of /dev/sda3 
 43. vim uuid 
 44. rm uuid
 45. vim /etc/default/grub 
     + enable cryptodisk 
-    + GRUB_CMDLINE_LINUX="cryptdevice=UUID=<uuid copypasteada>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile" 
+    + GRUB_CMDLINE_LINUX="cryptdevice=UUID=<copypasted uuid>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile" 
 46. grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi
 47. grub-mkconfig -o /boot/grub/grub.cfg 
 48. exit
 49. umount -a
 50. reboot   
-51. cambiar path bios \EFI\grub\grubx64.efi (F9 boot from EFI file)
+51. change bios path \EFI\grub\grubx64.efi (F9 boot from EFI file)
 52. sudo pacman -S broadcom-wl-dkms
 53. vim ~/.bashrc
 function wifiList() {
