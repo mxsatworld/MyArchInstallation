@@ -24,84 +24,73 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 6. burn the ISO to a usb and boot it
     + lsblk (to see the name of the usb)
     + sudo dd if=archlinux-2024.08.01-x86_64.iso of=/dev/sde bs=16M oflag=direct status=progress
-8. connect to the internet (im using my cellphone because arch doesnt recognize my wifi cards)
-timedatectl set-timezone America/Argentina/Buenos_Aires
-cfdisk 
-EFI 512MB
-SWAPON 16GB
-ROOT
-cryptsetup -y -v luksFormat --pbkdf pbkdf2 /dev/sda3
-cryptsetup open /dev/sda3 root
-mkfs.ext4 /dev/sda3
-mkswap /dev/sda2
-mkfs.fat -F 32 /dev/sda1
-mount /dev/sda3 /mnt
-mkdir /mnt/boot
-mkdir /mnt/boot/efi
-mount /dev/sda1 /mnt/boot/efi
-swapon /dev/sda2
-reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g vim networkmanager base-devel sudo linux-zen-headers
-genfstab -U /mnt >> /mnt/etc/fstab (check if it generated correctly)
-arch-chroot /mnt
-ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
-hwclock --systohc
-vim /etc/locale.gen (setear idioma)
-locale-gen (setear idioma)
-
-vim /etc/hosts
-127.0.0.1        localhost
-::1              localhost
-127.0.1.1        hp-elitebook-745-g2
-
-vim /etc/hostname 
-#escribir el nombre de la pc, hp-elitebook-745-g2
-
-vim /etc/locale.conf  
-#LANG=en_US.UTF-8
-
-systemctl enable NetworkManager
-passwd
-useradd -m -G wheel mxsatworld
-passwd mxsatworld
-
-vim /etc/sudoers 
-#uncomment
-#%wheel ALL=(ALL) ALL
-
-pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
-
-#add key to unlock disk when boot is unlocked 
-dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock
-chmod 000 /root/cryptlvm.keyfile
-cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile
-
-vim /etc/mkinitcpio.conf 
-#despues del hook autodetect poner "keyboard keymap" 
-#antes de filesystems poner hook encrypt 
-#FILES=(/root/cryptlvm.keyfile) 
-chmod 600 /boot/initramfs-linux* 
-mkinitcpio -p linux-zen 
-blkid >> uuid
-#copy UUID of /dev/sda3 
-vim uuid 
-rm uuid
-vim /etc/default/grub 
-#enable cryptodisk 
-GRUB_CMDLINE_LINUX="cryptdevice=UUID=<uuid copypasteada>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile" 
-#instalar grub
-grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi
-#generate config file
-grub-mkconfig -o /boot/grub/grub.cfg 
-exit
-umount -a
-reboot   
-
-#cambiar path bios \EFI\grub\grubx64.efi (F9 boot from EFI file)
-#drivers wifi 
-sudo pacman -S broadcom-wl-dkms
-#funciones para manejar wifi
-vim ~/.bashrc
+8. connect to the internet (im using my cellphone because arch doesnt recognize my wifi card)
+9. timedatectl set-timezone America/Argentina/Buenos_Aires
+10. cfdisk 
+    + EFI 512MB
+    + SWAPON 16GB
+    + ROOT
+11. cryptsetup -y -v luksFormat --pbkdf pbkdf2 /dev/sda3
+12. cryptsetup open /dev/sda3 root
+13. mkfs.ext4 /dev/mapper/root
+14. mkswap /dev/sda2
+15. mkfs.fat -F 32 /dev/sda1
+16. mount /dev/mapper/root /mnt
+17. mkdir /mnt/boot
+18. mkdir /mnt/boot/efi
+19. mount /dev/sda1 /mnt/boot/efi
+20. swapon /dev/sda2
+21. reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+22. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g vim networkmanager base-devel sudo linux-zen-headers
+23. genfstab -U /mnt >> /mnt/etc/fstab 
+    +vim /mnt/etc/fstab
+    +(check if it generated correctly)
+24. arch-chroot /mnt
+25. ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
+26. hwclock --systohc
+27. vim /etc/locale.gen
+28. locale-gen 
+29. vim /etc/hosts
+    + 127.0.0.1        localhost
+    + ::1              localhost
+    + 127.0.1.1        hp-elitebook-745-g2
+30. vim /etc/hostname 
+    + hp-elitebook-745-g2
+31. vim /etc/locale.conf  
+    +LANG=en_US.UTF-8
+32. systemctl enable NetworkManager
+33. passwd
+34. useradd -m -G wheel mxsatworld
+35. passwd mxsatworld
+36. vim /etc/sudoers 
+    +#uncomment
+    +#%wheel ALL=(ALL) ALL
+37. pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
+38. dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock
+    +add key to unlock disk when boot is unlocked 
+    +chmod 000 /root/cryptlvm.keyfile
+    +cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile
+39. vim /etc/mkinitcpio.conf 
+    +despues del hook autodetect poner "keyboard keymap" 
+    +antes de filesystems poner hook encrypt 
+    +FILES=(/root/cryptlvm.keyfile) 
+40. chmod 600 /boot/initramfs-linux* 
+41. mkinitcpio -p linux-zen 
+42. blkid >> uuid
+    +copy UUID of /dev/sda3 
+43. vim uuid 
+44. rm uuid
+45. vim /etc/default/grub 
+    + enable cryptodisk 
+    + GRUB_CMDLINE_LINUX="cryptdevice=UUID=<uuid copypasteada>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile" 
+46. grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi
+47. grub-mkconfig -o /boot/grub/grub.cfg 
+48. exit
+49. umount -a
+50. reboot   
+51. cambiar path bios \EFI\grub\grubx64.efi (F9 boot from EFI file)
+52. sudo pacman -S broadcom-wl-dkms
+53. vim ~/.bashrc
 function wifiList() {
     nmcli dev wifi list 
 } 
@@ -122,10 +111,14 @@ sudo pacman -S firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl 
 alsamixer
 #desmutear todos los canales, puede ser necesario reiniciar para que los cambios hagan efecto 
 #EN CASO DE QUE HAYA PROBLEMAS DE AUDIO DEFINIR TARJETA DE SONIDO DEFAULT O INVESTIGAR COMO
-#INICIALIZAR EL SERVICIO SND-PCM-OSS AL INICIO DEL SISTEMA (HACER ESTO SOLO DE SER NECESARIO) 
 sudo vim /etc/modules-load.d/snd-pcm-oss.conf
 #sound module
 snd-pcm-oss
+
+sudo vim /etc/modules-load.d/btusb.conf
+#bluetooth module, remember to trust devices before connect 
+btusb
+
 aplay -l 
 #ver cual es el nombre de la tarjeta de sonido, en mi caso se llama Generic
 vim ~/.asoundrc
@@ -187,7 +180,8 @@ tztime local {
         format = "%a %d/%m/%Y %H:%M"
 } 
 
-sudo pacman -S lxappearance arc-gtk-theme
+sudo pacman -S lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth
+systemctl enable bluetooth
 
 ## Sources
 1. archlinux.org
