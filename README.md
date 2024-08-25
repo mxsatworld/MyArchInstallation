@@ -123,6 +123,9 @@ alsamixer
 #desmutear todos los canales, puede ser necesario reiniciar para que los cambios hagan efecto 
 #EN CASO DE QUE HAYA PROBLEMAS DE AUDIO DEFINIR TARJETA DE SONIDO DEFAULT O INVESTIGAR COMO
 #INICIALIZAR EL SERVICIO SND-PCM-OSS AL INICIO DEL SISTEMA (HACER ESTO SOLO DE SER NECESARIO) 
+sudo vim /etc/modules-load.d/snd-pcm-oss.conf
+#sound module
+snd-pcm-oss
 aplay -l 
 #ver cual es el nombre de la tarjeta de sonido, en mi caso se llama Generic
 vim ~/.asoundrc
