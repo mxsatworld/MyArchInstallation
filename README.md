@@ -90,95 +90,25 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 50. reboot   
 51. change bios path \EFI\grub\grubx64.efi (F9 boot from EFI file)
 52. sudo pacman -S broadcom-wl-dkms
-53. vim ~/.bashrc
-function wifiList() {
-    nmcli dev wifi list 
-} 
-function wifiConnect() {
-	sudo nmcli --ask dev wifi connect "$1"
-}
-function wifiDisconnect(){
-        nmcli con down "$1" 
-} 
-#reiniciar para poder usar los drivers 
-reboot 
-#instalar e iniciar i3 y emulador terminal 
-sudo pacman -S xorg xorg-xinit i3 xfce4-terminal
-vim ~/.xinitrc 
-#exec i3
-startx
-sudo pacman -S firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip git maim libreoffice
-alsamixer
-#desmutear todos los canales, puede ser necesario reiniciar para que los cambios hagan efecto 
-#EN CASO DE QUE HAYA PROBLEMAS DE AUDIO DEFINIR TARJETA DE SONIDO DEFAULT O INVESTIGAR COMO
-sudo vim /etc/modules-load.d/snd-pcm-oss.conf
-#sound module
-snd-pcm-oss
-
-sudo vim /etc/modules-load.d/btusb.conf
-#bluetooth module, remember to trust devices before connect 
-btusb
-
-aplay -l 
-#ver cual es el nombre de la tarjeta de sonido, en mi caso se llama Generic
-vim ~/.asoundrc
-pcm.!default {
-   type hw
-   card Generic
-}
-
-ctl.!default {
-   type hw
-   card Generic
-}
-reboot 
-~/.config/i3/config
-#personal commands
-bindsym ctrl+Shift+Return exec xfce4-terminal -e htop
-bindsym ctrl+Shift+l exec i3lock
-exec_always setxkbmap -layout us -variant altgr-intl
-bindsym XF86MonBrightnessDown exec brightnessctl set 1%-
-bindsym XF86MonBrightnessUp exec brightnessctl set +1% 
-#screenshots
-bindsym ctrl+Shift+r exec maim -s | xclip -selection clipboard -t image/png
-#resolution of pop ups and floating windows
-floating_minimum_size 75 x 50
-floating_maximum_size 400 x 300 
-#end personal commands 
-~/.config/i3status/config 
-general {
-        colors = true
-        interval = 5
-}
-
-order += "wireless _first_"
-order += "ethernet _first_"
-order += "battery all"
-order += "memory"
-order += "tztime local"
-
-wireless _first_ {
-        format_up = "Wi-fi signal: (%quality at %essid) "
-        format_down = "Wi-fi signal: down"
-}
-
-ethernet _first_ {
-        format_up = "Ethernet: up (%speed)"
-        format_down = "Ethernet: down"
-}
-
-battery all {
-        format = "BATERY %status %percentage %remaining"
-}
-memory {
-        format = "in use RAM %used | available RAM %available"
-        threshold_degraded = "1G"
-        format_degraded = "MEMORY < %available"
-}
-
-tztime local {
-        format = "%a %d/%m/%Y %H:%M"
-} 
+    + reboot 
+53. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal
+54. vim ~/.xinitrc 
+    + exec i3
+    + startx
+55. sudo pacman -S firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip git maim libreoffice
+56. alsamixer
+    + unmute all channels    
+57. sudo vim /etc/modules-load.d/snd-pcm-oss.conf
+    + #sound module
+    + snd-pcm-oss
+58. sudo vim /etc/modules-load.d/btusb.conf
+    + #bluetooth module
+    + btusb
+    + #bluetooth module, remember to trust devices before connect 
+59. aplay -l 
+    + #see whats is the sound card name, in my case is "Generic"
+60. reboot 
+ 
 
 sudo pacman -S lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth
 systemctl enable bluetooth

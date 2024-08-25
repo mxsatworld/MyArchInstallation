@@ -1,0 +1,32 @@
+general { 
+	colors = true interval = 5 
+}
+
+order += "wireless first" 
+order += "ethernet first" 
+order += "battery all" 
+order += "memory" 
+order += "tztime local"
+
+wireless first { 
+	format_up = "Wi-fi signal: (%quality at %essid) " 
+	format_down = "Wi-fi signal: down" 
+}
+
+ethernet first { 
+	format_up = "Ethernet: up (%speed)" format_down = "Ethernet: down" 
+}
+
+battery all { 
+	format = "BATERY %status %percentage %remaining" 
+} 
+
+memory { 
+	format = "in use RAM %used | available RAM %available" 
+	threshold_degraded = "1G" 
+	format_degraded = "MEMORY < %available" 
+}
+
+tztime local { 
+	format = "%a %d/%m/%Y %H:%M" 
+}
