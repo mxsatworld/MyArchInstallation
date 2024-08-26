@@ -89,7 +89,8 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 49. umount -a
 50. reboot   
 51. change bios path \EFI\grub\grubx64.efi (F9 boot from EFI file)
-52. sudo pacman -S broadcom-wl-dkms
+52. sudo pacman -S broadcom-wl-dkms git
+    + clone this repo so i can use the config files
     + reboot 
 53. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal
 54. vim ~/.xinitrc 
@@ -108,9 +109,11 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 59. aplay -l 
     + #see whats is the sound card name, in my case is "Generic"
 60. reboot 
-61. sudo pacman -S lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils 
+61. sudo pacman -S lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh 
     + hplip (maybe)
 62. systemctl enable bluetooth
+63. ssh-keygen -t rsa -b 4096 -C "mcuadrado578@gmail.com"
+    + add public key to github
 add guide on how to make a printer work
 cups cups-pdf usbutils
 ###
