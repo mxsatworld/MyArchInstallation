@@ -108,10 +108,11 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 59. aplay -l 
     + #see whats is the sound card name, in my case is "Generic"
 60. reboot 
- 
-
-sudo pacman -S lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth
-systemctl enable bluetooth
+61. sudo pacman -S lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils 
+    + hplip (maybe)
+62. systemctl enable bluetooth
+add guide on how to make a printer work
+cups cups-pdf usbutils
 ###
 ## Sources
 1. archlinux.org
