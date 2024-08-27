@@ -49,6 +49,8 @@ bindsym XF86MonBrightnessUp exec brightnessctl set +1%
 bindsym ctrl+Shift+r exec maim -s | xclip -selection clipboard -t image/png
 exec_always setxkbmap -layout us -variant altgr-intl
 floating_minimum_size 75 x 50
+exec_always xinput disable "SynPS/2 Synaptics TouchPad"
+exec_always xset dpms 0 0 300
 #end custom commands
 
 # Use Mouse+$mod to drag floating windows to their wanted position

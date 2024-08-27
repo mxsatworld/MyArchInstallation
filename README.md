@@ -24,112 +24,107 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 6. burn the ISO to a usb and boot it
     + lsblk (to see the name of the usb)
     + sudo dd if=archlinux-2024.08.01-x86_64.iso of=/dev/sde bs=16M oflag=direct status=progress
-8. connect to the internet (im using my cellphone because arch doesnt recognize my wifi card)
-9. timedatectl set-timezone America/Argentina/Buenos_Aires
-10. cfdisk 
+7. connect to the internet (im using my cellphone because arch doesnt recognize my wifi card)
+8. timedatectl set-timezone America/Argentina/Buenos_Aires
+9. cfdisk 
     + EFI 512MB
     + SWAPON 16GB
     + ROOT
-11. cryptsetup -y -v luksFormat --pbkdf pbkdf2 /dev/sda3
-12. cryptsetup open /dev/sda3 root
-13. mkfs.ext4 /dev/mapper/root
-14. mkswap /dev/sda2
-15. mkfs.fat -F 32 /dev/sda1
-16. mount /dev/mapper/root /mnt
-17. mkdir /mnt/boot
-18. mkdir /mnt/boot/efi
-19. mount /dev/sda1 /mnt/boot/efi
-20. swapon /dev/sda2
-21. reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-22. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g vim networkmanager base-devel sudo linux-zen-headers
-23. genfstab -U /mnt >> /mnt/etc/fstab 
+10. cryptsetup -y -v luksFormat --pbkdf pbkdf2 /dev/sda3
+11. cryptsetup open /dev/sda3 root
+12. mkfs.ext4 /dev/mapper/root
+13. mkswap /dev/sda2
+14. mkfs.fat -F 32 /dev/sda1
+15. mount /dev/mapper/root /mnt
+16. mkdir /mnt/boot
+17. mkdir /mnt/boot/efi
+18. mount /dev/sda1 /mnt/boot/efi
+19. swapon /dev/sda2
+20. reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+21. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g vim networkmanager base-devel sudo linux-zen-headers
+22. genfstab -U /mnt >> /mnt/etc/fstab 
     + vim /mnt/etc/fstab
     + (check if it generated correctly)
-24. arch-chroot /mnt
-25. ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
-26. hwclock --systohc
-27. vim /etc/locale.gen
-28. locale-gen 
-29. vim /etc/hosts
+23. arch-chroot /mnt
+24. ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
+25. hwclock --systohc
+26. vim /etc/locale.gen
+27. locale-gen 
+28. vim /etc/hosts
     + 127.0.0.1        localhost
     + ::1              localhost
     + 127.0.1.1        hp-elitebook-745-g2
-30. vim /etc/hostname 
+29. vim /etc/hostname 
     + hp-elitebook-745-g2
-31. vim /etc/locale.conf  
+30. vim /etc/locale.conf  
     + LANG=en_US.UTF-8
-32. systemctl enable NetworkManager
-33. passwd
-34. useradd -m -G wheel mxsatworld
-35. passwd mxsatworld
-36. vim /etc/sudoers 
+31. systemctl enable NetworkManager
+32. passwd
+33. useradd -m -G wheel mxsatworld
+34. passwd mxsatworld
+35. vim /etc/sudoers 
     + uncomment
     + %wheel ALL=(ALL) ALL
-37. pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
-38. add key to unlock disk when boot is unlocked 
+36. pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
+37. add key to unlock disk when boot is unlocked 
     + dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock
     + chmod 000 /root/cryptlvm.keyfile
     + cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile
-39. vim /etc/mkinitcpio.conf 
+38. vim /etc/mkinitcpio.conf 
     + after the autodetect hook put "keyboard keymap" hooks 
     + before filesystems hook put encrypt hook
     + FILES=(/root/cryptlvm.keyfile) 
-40. chmod 600 /boot/initramfs-linux* 
-41. mkinitcpio -p linux-zen 
-42. blkid >> uuid
+39. chmod 600 /boot/initramfs-linux* 
+40. mkinitcpio -p linux-zen 
+41. blkid >> uuid
     + copy UUID of /dev/sda3 
-43. vim uuid 
-44. rm uuid
-45. vim /etc/default/grub 
+42. vim uuid 
+43. rm uuid
+44. vim /etc/default/grub 
     + enable cryptodisk 
     + GRUB_CMDLINE_LINUX="cryptdevice=UUID=<copypasted uuid>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile" 
-46. grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi
-47. grub-mkconfig -o /boot/grub/grub.cfg 
-48. exit
-49. umount -a
-50. reboot   
-51. change bios path \EFI\grub\grubx64.efi (F9 boot from EFI file)
-52. sudo pacman -S broadcom-wl-dkms git
+45. grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi
+46. grub-mkconfig -o /boot/grub/grub.cfg 
+47. exit
+48. umount -a
+49. reboot   
+50. change bios path \EFI\grub\grubx64.efi (F9 boot from EFI file)
+51. sudo pacman -S broadcom-wl-dkms git
     + clone this repo so i can use the config files
     + reboot 
-53. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal
-54. vim ~/.xinitrc 
-    + exec i3
-    + startx
-55. sudo pacman -S firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip git maim libreoffice
-56. alsamixer
+52. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock
+53. alsamixer
     + unmute all channels    
-57. sudo vim /etc/modules-load.d/snd-pcm-oss.conf
+54. sudo vim /etc/modules-load.d/snd-pcm-oss.conf
     + #sound module
     + snd-pcm-oss
-58. sudo vim /etc/modules-load.d/btusb.conf
+55. sudo vim /etc/modules-load.d/btusb.conf
     + #bluetooth module
     + btusb
     + #bluetooth module, remember to trust devices before connect 
-59. aplay -l 
-    + #see whats is the sound card name, in my case is "Generic"
-60. reboot 
-61. sudo pacman -S lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh 
-    + hplip (maybe)
-62. systemctl enable bluetooth
-63. ssh-keygen -t rsa -b 4096 -C "mcuadrado578@gmail.com"
+56. sudo vim /etc/systemd/logind.conf
+    + HandleLidSwitch=lock
+57. systemctl enable bluetooth
+58. systemctl enable cups.service
+59. config printer with http://localhost:631/admin 
+60. ssh-keygen -t rsa -b 4096 -C "mcuadrado578@gmail.com"
     + add public key to github
-add guide on how to make a printer work
-cups cups-pdf usbutils
-###
 ## Sources
 1. archlinux.org
 2. wiki.archlinux.org
+    + installation guide
+    + CUPS
 3. keys.openpgp.org
 4. https://www.youtube.com/watch?v=hPHW0y6RAZA&t=479s
 5. https://www.wikihow.com/Verify-a-PGP-Signature
-6. https://wiki.archlinux.org/title/Installation_guide 
-7. https://www.youtube.com/watch?v=u5Lv_HXICpo (for how to verify iso OS)
-8. https://keybase.io
-9. https://keys.openpgp.org
-10. https://keyserver.ubuntu.com
-11. http://keys.gnupg.net
-12. https://pgp.mit.edu
-13. https://keyoxide.org
-14. https://www.youtube.com/watch?v=XNJ4oKla8B0 
-15. https://www.freecodecamp.org/news/how-to-install-arch-linux/
+6. https://www.youtube.com/watch?v=u5Lv_HXICpo (for how to verify iso OS)
+7. https://keybase.io
+8. https://keys.openpgp.org
+9. https://keyserver.ubuntu.com
+10. http://keys.gnupg.net
+11. https://pgp.mit.edu
+12. https://keyoxide.org
+13. https://www.youtube.com/watch?v=XNJ4oKla8B0 
+14. https://www.freecodecamp.org/news/how-to-install-arch-linux/
+15. github
+    + https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
