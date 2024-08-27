@@ -10,12 +10,15 @@ map <C-t> :tabnew<CR>
 map <C-Right> :tabn<CR>
 map <C-Left> :tabp<CR>
 "shift+t to open terminal
-map <S-t> :terminal<CR>
+map <S-t> :ToggleTerm<CR>
 map <C-s> :w<CR>
-map <C-w> :tabc<CR>
+map <C-x> :tabc<CR>
+tnoremap <Esc> <C-\><C-n>
 
 call plug#begin()
 " List your plugins here
 Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
+Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 call plug#end()
+
+lua require("toggleterm").setup()

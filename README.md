@@ -1,6 +1,6 @@
 # My Arch Installation
 ## Objetive
-Make a good performance system, thats why i selected the zen kernel and the i3 window manager, i tried to install as less packages as possible
+Make a good performance system, thats why i selected the zen kernel and the i1 window manager, i tried to install as less packages as possible
 ## Steps
 1. Download the iso file and the signature to verify it, download it from torrent in my case
     + https://archlinux.org/download/
