@@ -41,28 +41,28 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 18. mount /dev/sda1 /mnt/boot/efi
 19. swapon /dev/sda2
 20. reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-21. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g vim networkmanager base-devel sudo linux-zen-headers
+21. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g neovim networkmanager base-devel sudo linux-zen-headers
 22. genfstab -U /mnt >> /mnt/etc/fstab 
-    + vim /mnt/etc/fstab
+    + nvim /mnt/etc/fstab
     + (check if it generated correctly)
 23. arch-chroot /mnt
 24. ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
 25. hwclock --systohc
-26. vim /etc/locale.gen
+26. nvim /etc/locale.gen
 27. locale-gen 
-28. vim /etc/hosts
+28. nvim /etc/hosts
     + 127.0.0.1        localhost
     + ::1              localhost
     + 127.0.1.1        hp-elitebook-745-g2
-29. vim /etc/hostname 
+29. nvim /etc/hostname 
     + hp-elitebook-745-g2
-30. vim /etc/locale.conf  
+30. nvim /etc/locale.conf  
     + LANG=en_US.UTF-8
 31. systemctl enable NetworkManager
 32. passwd
 33. useradd -m -G wheel mxsatworld
 34. passwd mxsatworld
-35. vim /etc/sudoers 
+35. nvim /etc/sudoers 
     + uncomment
     + %wheel ALL=(ALL) ALL
 36. pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
@@ -70,7 +70,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     + dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock
     + chmod 000 /root/cryptlvm.keyfile
     + cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile
-38. vim /etc/mkinitcpio.conf 
+38. nvim /etc/mkinitcpio.conf 
     + after the autodetect hook put "keyboard keymap" hooks 
     + before filesystems hook put encrypt hook
     + FILES=(/root/cryptlvm.keyfile) 
@@ -78,9 +78,9 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 40. mkinitcpio -p linux-zen 
 41. blkid >> uuid
     + copy UUID of /dev/sda3 
-42. vim uuid 
+42. nvim uuid 
 43. rm uuid
-44. vim /etc/default/grub 
+44. nvim /etc/default/grub 
     + enable cryptodisk 
     + GRUB_CMDLINE_LINUX="cryptdevice=UUID=<copypasted uuid>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile" 
 45. grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi
@@ -102,8 +102,8 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     + #bluetooth module
     + btusb
     + #bluetooth module, remember to trust devices before connect 
-56. sudo vim /etc/systemd/logind.conf
-    + HandleLidSwitch=lock
+56. sudo nvim /etc/systemd/logind.conf
+    + HandleLidSwitch=hibernate
 57. systemctl enable bluetooth
 58. systemctl enable cups.service
 59. config printer with http://localhost:631/admin 
