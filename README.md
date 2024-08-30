@@ -41,28 +41,28 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 18. mount /dev/sda1 /mnt/boot ~mount /dev/sda1 /mnt/boot/efi~
 19. swapon /dev/sda2
 20. reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-21. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g vim networkmanager base-devel sudo linux-zen-headers
+21. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g neovim networkmanager base-devel sudo linux-zen-headers
 22. genfstab -U /mnt >> /mnt/etc/fstab 
-    + vim /mnt/etc/fstab
+    + nvim /mnt/etc/fstab
     + (check if it generated correctly)
 23. arch-chroot /mnt
 24. ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
 25. hwclock --systohc
-26. vim /etc/locale.gen
+26. nvim /etc/locale.gen
 27. locale-gen 
-28. vim /etc/hosts
+28. nvim /etc/hosts
     + 127.0.0.1        localhost
     + ::1              localhost
     + 127.0.1.1        hp-elitebook-745-g2
-29. vim /etc/hostname 
+29. nvim /etc/hostname 
     + hp-elitebook-745-g2
-30. vim /etc/locale.conf  
+30. nvim /etc/locale.conf  
     + LANG=en_US.UTF-8
 31. systemctl enable NetworkManager
 32. passwd
 33. useradd -m -G wheel mxsatworld
 34. passwd mxsatworld
-35. vim /etc/sudoers 
+35. nvim /etc/sudoers 
     + uncomment
     + %wheel ALL=(ALL) ALL
 36. pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
@@ -70,7 +70,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     + ~dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock~
     + ~chmod 000 /root/cryptlvm.keyfile~
     + ~cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile~
-38. ~vim /etc/mkinitcpio.conf~
+38. ~nvim /etc/mkinitcpio.conf~
     + ~after the autodetect hook put "keyboard keymap" hooks~
     + ~before filesystems hook put encrypt hook~
     + ~FILES=(/root/cryptlvm.keyfile)~
@@ -95,10 +95,10 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 52. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock tmux
 53. alsamixer
     + unmute all channels    
-54. sudo vim /etc/modules-load.d/snd-pcm-oss.conf
+54. sudo nvim /etc/modules-load.d/snd-pcm-oss.conf
     + #sound module
     + snd-pcm-oss
-55. sudo vim /etc/modules-load.d/btusb.conf
+55. sudo nvim /etc/modules-load.d/btusb.conf
     + #bluetooth module
     + btusb
     + #bluetooth module, remember to trust devices before connect 
