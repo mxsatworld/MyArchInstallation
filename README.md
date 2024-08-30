@@ -31,58 +31,58 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     + SWAPON 16GB
     + ROOT
 10. ~cryptsetup -y -v luksFormat --pbkdf pbkdf2 /dev/sda3~
-11. cryptsetup open /dev/sda3 root
-12. mkfs.ext4 /dev/mapper/root
+11. ~cryptsetup open /dev/sda3 root~
+12. mkfs.ext4 /dev/sda3 ~mkfs.ext4 /dev/mapper/root~
 13. mkswap /dev/sda2
 14. mkfs.fat -F 32 /dev/sda1
-15. mount /dev/mapper/root /mnt
+15. mount /dev/sda3 /mnt ~mount /dev/mapper/root /mnt~
 16. mkdir /mnt/boot
-17. mkdir /mnt/boot/efi
-18. mount /dev/sda1 /mnt/boot/efi
+17. ~mkdir /mnt/boot/efi~
+18. mount /dev/sda1 /mnt/boot ~mount /dev/sda1 /mnt/boot/efi~
 19. swapon /dev/sda2
 20. reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-21. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g neovim networkmanager base-devel sudo linux-zen-headers
+21. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g vim networkmanager base-devel sudo linux-zen-headers
 22. genfstab -U /mnt >> /mnt/etc/fstab 
-    + nvim /mnt/etc/fstab
+    + vim /mnt/etc/fstab
     + (check if it generated correctly)
 23. arch-chroot /mnt
 24. ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
 25. hwclock --systohc
-26. nvim /etc/locale.gen
+26. vim /etc/locale.gen
 27. locale-gen 
-28. nvim /etc/hosts
+28. vim /etc/hosts
     + 127.0.0.1        localhost
     + ::1              localhost
     + 127.0.1.1        hp-elitebook-745-g2
-29. nvim /etc/hostname 
+29. vim /etc/hostname 
     + hp-elitebook-745-g2
-30. nvim /etc/locale.conf  
+30. vim /etc/locale.conf  
     + LANG=en_US.UTF-8
 31. systemctl enable NetworkManager
 32. passwd
 33. useradd -m -G wheel mxsatworld
 34. passwd mxsatworld
-35. nvim /etc/sudoers 
+35. vim /etc/sudoers 
     + uncomment
     + %wheel ALL=(ALL) ALL
 36. pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
-37. add key to unlock disk when boot is unlocked 
-    + dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock
-    + chmod 000 /root/cryptlvm.keyfile
-    + cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile
-38. nvim /etc/mkinitcpio.conf 
-    + after the autodetect hook put "keyboard keymap" hooks 
-    + before filesystems hook put encrypt hook
-    + FILES=(/root/cryptlvm.keyfile) 
-39. chmod 600 /boot/initramfs-linux* 
+37. ~add key to unlock disk when boot is unlocked~
+    + ~dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock~
+    + ~chmod 000 /root/cryptlvm.keyfile~
+    + ~cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile~
+38. ~vim /etc/mkinitcpio.conf~
+    + ~after the autodetect hook put "keyboard keymap" hooks~
+    + ~before filesystems hook put encrypt hook~
+    + ~FILES=(/root/cryptlvm.keyfile)~
+39. ~chmod 600 /boot/initramfs-linux*~
 40. mkinitcpio -p linux-zen 
-41. blkid >> uuid
-    + copy UUID of /dev/sda3 
-42. nvim uuid 
-43. rm uuid
-44. nvim /etc/default/grub 
-    + enable cryptodisk 
-    + GRUB_CMDLINE_LINUX="cryptdevice=UUID=<copypasted uuid>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile" 
+41. ~blkid >> uuid~
+    + ~copy UUID of /dev/sda3~
+42. ~vim uuid~
+43. ~rm uuid~
+44. ~vim /etc/default/grub~
+    + ~enable cryptodisk~
+    + ~GRUB_CMDLINE_LINUX="cryptdevice=UUID=<copypasted uuid>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile"~
 45. grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi
 46. grub-mkconfig -o /boot/grub/grub.cfg 
 47. exit
@@ -92,7 +92,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 51. sudo pacman -S broadcom-wl-dkms git
     + clone this repo so i can use the config files
     + reboot 
-52. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock
+52. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock tmux
 53. alsamixer
     + unmute all channels    
 54. sudo vim /etc/modules-load.d/snd-pcm-oss.conf
