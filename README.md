@@ -109,6 +109,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 59. config printer with http://localhost:631/admin 
 60. ssh-keygen -t rsa -b 4096 -C "mcuadrado578@gmail.com"
     + add public key to github
+61. AUR (opera)
 ## Sources
 1. archlinux.org
 2. wiki.archlinux.org

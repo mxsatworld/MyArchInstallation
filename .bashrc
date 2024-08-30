@@ -8,6 +8,7 @@
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias tmux='tmux a'
+alias vim='cd ~/Repositories && vim'
 PS1='[\u@\h \W]\$ '
 
 function wifiList() {
