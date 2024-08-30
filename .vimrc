@@ -5,7 +5,7 @@ colorscheme slate
 set number
 
 "Ctrl+b for Vertical Explorer
-map <C-b> :Lexplore ~/Repositories<CR>
+map <C-b> :Lexplore<CR>
 map <C-t> :tabnew<CR>
 map <C-Right> :tabn<CR>
 map <C-Left> :tabp<CR>
