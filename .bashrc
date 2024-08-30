@@ -7,6 +7,7 @@
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias tmux='tmux a'
 PS1='[\u@\h \W]\$ '
 
 function wifiList() {
@@ -17,4 +18,7 @@ function wifiConnect() {
 }
 function wifiDisconnect() {
 	nmcli con down "$1"
+}
+function wifiStatus(){
+	nmcli con show --active
 }

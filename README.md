@@ -1,6 +1,6 @@
 # My Arch Installation
 ## Objetive
-Make a good performance system, thats why i selected the zen kernel and the i1 window manager, i tried to install as less packages as possible
+Make a good performance system, thats why i selected the zen kernel and the i3 window manager, i tried to install as less packages as possible
 ## Steps
 1. Download the iso file and the signature to verify it, download it from torrent in my case
     + https://archlinux.org/download/
@@ -30,8 +30,8 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     + EFI 512MB
     + SWAPON 16GB
     + ROOT
-10. cryptsetup -y -v luksFormat --pbkdf pbkdf2 /dev/sda3
-11. cryptsetup open /dev/sda3 root
+~10. cryptsetup -y -v luksFormat --pbkdf pbkdf2 /dev/sda3
+11. cryptsetup open /dev/sda3 root~
 12. mkfs.ext4 /dev/mapper/root
 13. mkswap /dev/sda2
 14. mkfs.fat -F 32 /dev/sda1
@@ -103,7 +103,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     + btusb
     + #bluetooth module, remember to trust devices before connect 
 56. sudo nvim /etc/systemd/logind.conf
-    + HandleLidSwitch=hibernate
+    + HandleLidSwitch=suspend
 57. systemctl enable bluetooth
 58. systemctl enable cups.service
 59. config printer with http://localhost:631/admin 

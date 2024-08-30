@@ -5,12 +5,11 @@ colorscheme slate
 set number
 
 "Ctrl+b for Vertical Explorer
-map <C-b> :Lexplore<CR>
+map <C-b> :Lexplore ~/Repositories<CR>
 map <C-t> :tabnew<CR>
 map <C-Right> :tabn<CR>
 map <C-Left> :tabp<CR>
 "shift+t to open terminal
-map <S-t> :ToggleTerm<CR>
 map <C-s> :w<CR>
 map <C-x> :tabc<CR>
 tnoremap <Esc> <C-\><C-n>
@@ -18,7 +17,4 @@ tnoremap <Esc> <C-\><C-n>
 call plug#begin()
 " List your plugins here
 Plug 'prabirshrestha/vim-lsp'
-Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 call plug#end()
-
-lua require("toggleterm").setup()
