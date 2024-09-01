@@ -56,7 +56,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
     
     #install base packages
-    pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g neovim networkmanager base-devel sudo linux-zen-headers
+    pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g neovim networkmanager base-devel sudo linux-zen-headers reflector
     
     #generate filesystem tab
     genfstab -U /mnt >> /mnt/etc/fstab 
@@ -67,6 +67,9 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     #enter the root system
     arch-chroot /mnt
     
+    #get mirrors
+    reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+
     #set date
     ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
     hwclock --systohc
@@ -117,6 +120,14 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     ```
 7. change bios path \EFI\grub\grubx64.efi (F9 boot from EFI file)
 ```
+#restore backuped files
+lsblk
+mkdir ~/usb
+sudo mount /dev/sdb ~/usb
+cp ~/usb/ ~
+sudo umount ~/usb
+#unplug usb
+
 #wifi drivers, reboot is necessary
 sudo pacman -S broadcom-wl-dkms
 reboot
@@ -124,6 +135,7 @@ reboot
 #install packages
 nmcli dev wifi list
 sudo nmcli --ask dev wifi connect "$1"
+#unplug cellphone
 sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock tmux git lightdm lightdm-gtk-greeter
 
 #start X
@@ -135,6 +147,7 @@ startx
     + ssh-keygen -t rsa -b 4096 -C "mcuadrado578@gmail.com"
     + add key
     + git clone with ssh this repo and use the config files
+    + close firefox session
 9. alsamixer
     + unmute all channels    
 ```
