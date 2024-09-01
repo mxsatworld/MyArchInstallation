@@ -15,8 +15,10 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     + Key fingerprint = 3E80 CA1A 8B89 F69C BA57  D98A 76A5 EF90 5444 9A5C
 3. import and sign the pierre key, you need to make your own pgp key to do this
 4. edit sha256sums.txt and b2sums.txt to only leave the sum that suits you (they give you 3 options)
-    + vim sha256sums.txt
-    + vim b2sums.txt
+    ```
+    vim sha256sums.txt
+    vim b2sums.txt
+    ```
 5. then run these commands to check everything is ok
     + sha256sum -c sha256sums.txt
     + b2sum -c b2sums.txt
@@ -101,10 +103,10 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     + git clone with ssh this repo and use the config files
 53. alsamixer
     + unmute all channels    
-54. sudo vim /etc/modules-load.d/snd-pcm-oss.conf
+54. sudo nvim /etc/modules-load.d/snd-pcm-oss.conf
     + #sound module
     + snd-pcm-oss
-55. sudo vim /etc/modules-load.d/btusb.conf
+55. sudo nvim /etc/modules-load.d/btusb.conf
     + #bluetooth module
     + btusb
     + #bluetooth module, remember to trust devices before connect 
