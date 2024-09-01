@@ -89,9 +89,10 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 48. umount -a
 49. reboot   
 50. change bios path \EFI\grub\grubx64.efi (F9 boot from EFI file)
-51. sudo pacman -S broadcom-wl-dkms git
+51. sudo pacman -S broadcom-wl-dkms git openssh
     + clone this repo so i can use the config files
     + reboot 
++ generate key github (last step)
 52. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock tmux
 53. alsamixer
     + unmute all channels    
