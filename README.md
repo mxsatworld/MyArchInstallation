@@ -75,41 +75,42 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     + ~before filesystems hook put encrypt hook~
     + ~FILES=(/root/cryptlvm.keyfile)~
 39. ~chmod 600 /boot/initramfs-linux*~
-40. mkinitcpio -p linux-zen 
+40. ~mkinitcpio -p linux-zen~
 41. ~blkid >> uuid~
     + ~copy UUID of /dev/sda3~
-42. ~vim uuid~
+42. ~nvim uuid~
 43. ~rm uuid~
-44. ~vim /etc/default/grub~
+44. ~nvim /etc/default/grub~
     + ~enable cryptodisk~
     + ~GRUB_CMDLINE_LINUX="cryptdevice=UUID=<copypasted uuid>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile"~
-45. grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi
+45. grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot ~grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi~
 46. grub-mkconfig -o /boot/grub/grub.cfg 
 47. exit
 48. umount -a
 49. reboot   
 50. change bios path \EFI\grub\grubx64.efi (F9 boot from EFI file)
-51. sudo pacman -S broadcom-wl-dkms git openssh
-    + clone this repo so i can use the config files
+51. sudo pacman -S broadcom-wl-dkms
     + reboot 
-+ generate key github (last step)
-52. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock tmux
+52. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock tmux git
+53. nvim ~/.xinitrc
+    + exec i3
+    + startx
+54. login to github
+    + ssh-keygen -t rsa -b 4096 -C "mcuadrado578@gmail.com"
+    + add key
+    + git clone with ssh this repo and use the config files
 53. alsamixer
     + unmute all channels    
-54. sudo nvim /etc/modules-load.d/snd-pcm-oss.conf
+54. sudo vim /etc/modules-load.d/snd-pcm-oss.conf
     + #sound module
     + snd-pcm-oss
-55. sudo nvim /etc/modules-load.d/btusb.conf
+55. sudo vim /etc/modules-load.d/btusb.conf
     + #bluetooth module
     + btusb
     + #bluetooth module, remember to trust devices before connect 
-56. sudo nvim /etc/systemd/logind.conf
-    + HandleLidSwitch=suspend
 57. systemctl enable bluetooth
 58. systemctl enable cups.service
 59. config printer with http://localhost:631/admin 
-60. ssh-keygen -t rsa -b 4096 -C "mcuadrado578@gmail.com"
-    + add public key to github
 61. AUR (opera)
 ## Sources
 1. archlinux.org
