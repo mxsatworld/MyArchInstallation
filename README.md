@@ -26,6 +26,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     
     #to see the name of the usb
     lsblk
+    
     #burn the iso file in a usb
     sudo dd if=archlinux-2024.08.01-x86_64.iso of=/dev/sde bs=16M oflag=direct status=progress
     ```
