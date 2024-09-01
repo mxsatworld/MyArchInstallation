@@ -54,69 +54,53 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     nvim /etc/locale.gen
     locale-gen 
     nvim /etc/hosts
+        # 127.0.0.1        localhost
+        # ::1              localhost
+        # 127.0.1.1        hp-elitebook-745-g2
+    nvim /etc/hostname 
+        # hp-elitebook-745-g2
+    nvim /etc/locale.conf  
+        # LANG=en_US.UTF-8
+    systemctl enable NetworkManager
+    passwd
+    useradd -m -G wheel mxsatworld
+    passwd mxsatworld
+    nvim /etc/sudoers 
+        # uncomment
+        # %wheel ALL=(ALL) ALL
+    pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
+    grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot
+    grub-mkconfig -o /boot/grub/grub.cfg 
+    exit
+    umount -a
+    reboot
     ```
-    127.0.0.1        localhost
-    ::1              localhost
-    127.0.1.1        hp-elitebook-745-g2
-    ```
-    
-    ```
-29. nvim /etc/hostname 
-    + hp-elitebook-745-g2
-30. nvim /etc/locale.conf  
-    + LANG=en_US.UTF-8
-31. systemctl enable NetworkManager
-32. passwd
-33. useradd -m -G wheel mxsatworld
-34. passwd mxsatworld
-35. nvim /etc/sudoers 
-    + uncomment
-    + %wheel ALL=(ALL) ALL
-36. pacman -S amd-ucode grub efibootmgr xf86-video-amdgpu
-37. ~add key to unlock disk when boot is unlocked~
-    + ~dd bs=512 count=4 if=/dev/random of=/root/cryptlvm.keyfile iflag=fullblock~
-    + ~chmod 000 /root/cryptlvm.keyfile~
-    + ~cryptsetup -v luksAddKey /dev/sda3 /root/cryptlvm.keyfile~
-38. ~nvim /etc/mkinitcpio.conf~
-    + ~after the autodetect hook put "keyboard keymap" hooks~
-    + ~before filesystems hook put encrypt hook~
-    + ~FILES=(/root/cryptlvm.keyfile)~
-39. ~chmod 600 /boot/initramfs-linux*~
-40. ~mkinitcpio -p linux-zen~
-41. ~blkid >> uuid~
-    + ~copy UUID of /dev/sda3~
-42. ~nvim uuid~
-43. ~rm uuid~
-44. ~nvim /etc/default/grub~
-    + ~enable cryptodisk~
-    + ~GRUB_CMDLINE_LINUX="cryptdevice=UUID=<copypasted uuid>:root root=/dev/mapper/root cryptkey=rootfs:/root/cryptlvm.keyfile"~
-45. grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot ~grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot/efi~
-46. grub-mkconfig -o /boot/grub/grub.cfg 
-47. exit
-48. umount -a
-49. reboot   
 50. change bios path \EFI\grub\grubx64.efi (F9 boot from EFI file)
-51. sudo pacman -S broadcom-wl-dkms
-    + reboot 
-52. sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock tmux git
-53. nvim ~/.xinitrc
-    + exec i3
-    + startx
+```
+sudo pacman -S broadcom-wl-dkms
+#reboot
+sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock tmux git
+nvim ~/.xinitrc
+    # exec i3
+startx
+```
 54. login to github
     + ssh-keygen -t rsa -b 4096 -C "mcuadrado578@gmail.com"
     + add key
     + git clone with ssh this repo and use the config files
 53. alsamixer
     + unmute all channels    
-54. sudo nvim /etc/modules-load.d/snd-pcm-oss.conf
-    + #sound module
-    + snd-pcm-oss
-55. sudo nvim /etc/modules-load.d/btusb.conf
-    + #bluetooth module
-    + btusb
-    + #bluetooth module, remember to trust devices before connect 
-57. systemctl enable bluetooth
-58. systemctl enable cups.service
+```
+sudo nvim /etc/modules-load.d/snd-pcm-oss.conf
+    # sound module
+    # snd-pcm-oss
+sudo nvim /etc/modules-load.d/btusb.conf
+    # bluetooth module
+    # btusb
+    # bluetooth module, remember to trust devices before connect 
+systemctl enable bluetooth
+systemctl enable cups.service
+```
 59. config printer with http://localhost:631/admin 
 61. AUR (opera)
 ## Sources
