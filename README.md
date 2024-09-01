@@ -18,11 +18,12 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     ```
     vim sha256sums.txt
     vim b2sums.txt
+    
+    #check if the three verification files are in order
+    sha256sum -c sha256sums.txt
+    b2sum -c b2sums.txt
+    gpg --keyserver-options auto-key-retrieve --verify archlinux-2024.08.01-x86_64.iso.sig
     ```
-5. then run these commands to check everything is ok
-    + sha256sum -c sha256sums.txt
-    + b2sum -c b2sums.txt
-    + gpg --keyserver-options auto-key-retrieve --verify archlinux-2024.08.01-x86_64.iso.sig
 6. burn the ISO to a usb and boot it
     + lsblk (to see the name of the usb)
     + sudo dd if=archlinux-2024.08.01-x86_64.iso of=/dev/sde bs=16M oflag=direct status=progress
