@@ -103,7 +103,10 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     
     #install grub
     grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot
-    
+
+    #edit timeout of grub to 1 second
+    nvim /etc/default/grub
+
     #make grub config
     grub-mkconfig -o /boot/grub/grub.cfg 
     
