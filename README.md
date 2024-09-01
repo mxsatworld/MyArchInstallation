@@ -23,10 +23,11 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     sha256sum -c sha256sums.txt
     b2sum -c b2sums.txt
     gpg --keyserver-options auto-key-retrieve --verify archlinux-2024.08.01-x86_64.iso.sig
+    
+    #burn the iso file in a usb
+    lsblk #to see the name of the usb
+    sudo dd if=archlinux-2024.08.01-x86_64.iso of=/dev/sde bs=16M oflag=direct status=progress
     ```
-6. burn the ISO to a usb and boot it
-    + lsblk (to see the name of the usb)
-    + sudo dd if=archlinux-2024.08.01-x86_64.iso of=/dev/sde bs=16M oflag=direct status=progress
 7. connect to the internet (im using my cellphone because arch doesnt recognize my wifi card)
 8. timedatectl set-timezone America/Argentina/Buenos_Aires
 9. cfdisk 
