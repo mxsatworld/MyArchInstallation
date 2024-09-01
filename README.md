@@ -59,6 +59,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     ::1              localhost
     127.0.1.1        hp-elitebook-745-g2
     ```
+    
     ```
 29. nvim /etc/hostname 
     + hp-elitebook-745-g2
