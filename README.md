@@ -24,40 +24,42 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     b2sum -c b2sums.txt
     gpg --keyserver-options auto-key-retrieve --verify archlinux-2024.08.01-x86_64.iso.sig
     
+    #to see the name of the usb
+    lsblk
     #burn the iso file in a usb
-    lsblk #to see the name of the usb
     sudo dd if=archlinux-2024.08.01-x86_64.iso of=/dev/sde bs=16M oflag=direct status=progress
     ```
 7. connect to the internet (im using my cellphone because arch doesnt recognize my wifi card)
-8. timedatectl set-timezone America/Argentina/Buenos_Aires
-9. cfdisk 
-    + EFI 512MB
-    + SWAPON 16GB
-    + ROOT
-10. ~cryptsetup -y -v luksFormat --pbkdf pbkdf2 /dev/sda3~
-11. ~cryptsetup open /dev/sda3 root~
-12. mkfs.ext4 /dev/sda3 ~mkfs.ext4 /dev/mapper/root~
-13. mkswap /dev/sda2
-14. mkfs.fat -F 32 /dev/sda1
-15. mount /dev/sda3 /mnt ~mount /dev/mapper/root /mnt~
-16. mkdir /mnt/boot
-17. ~mkdir /mnt/boot/efi~
-18. mount /dev/sda1 /mnt/boot ~mount /dev/sda1 /mnt/boot/efi~
-19. swapon /dev/sda2
-20. reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-21. pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g neovim networkmanager base-devel sudo linux-zen-headers
-22. genfstab -U /mnt >> /mnt/etc/fstab 
-    + nvim /mnt/etc/fstab
-    + (check if it generated correctly)
-23. arch-chroot /mnt
-24. ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
-25. hwclock --systohc
-26. nvim /etc/locale.gen
-27. locale-gen 
-28. nvim /etc/hosts
-    + 127.0.0.1        localhost
-    + ::1              localhost
-    + 127.0.1.1        hp-elitebook-745-g2
+8. ```
+    timedatectl set-timezone America/Argentina/Buenos_Aires
+    cfdisk
+    #/dev/sda1 EFI 512MB
+    #/dev/sda2 SWAP 16GB
+    #/dev/sda3 ROOT
+    mkfs.ext4 /dev/sda3 
+    mkswap /dev/sda2
+    mkfs.fat -F 32 /dev/sda1
+    mount /dev/sda3 /mnt 
+    mkdir /mnt/boot
+    mount /dev/sda1 /mnt/boot 
+    swapon /dev/sda2
+    reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+    pacstrap -K /mnt base linux-zen linux-firmware ntfs-3g neovim networkmanager base-devel sudo linux-zen-headers
+    genfstab -U /mnt >> /mnt/etc/fstab 
+    #check if it generated correctly)
+    nvim /mnt/etc/fstab 
+    arch-chroot /mnt
+    ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
+    hwclock --systohc
+    nvim /etc/locale.gen
+    locale-gen 
+    nvim /etc/hosts
+    ```
+    127.0.0.1        localhost
+    ::1              localhost
+    127.0.1.1        hp-elitebook-745-g2
+    ```
+    ```
 29. nvim /etc/hostname 
     + hp-elitebook-745-g2
 30. nvim /etc/locale.conf  
