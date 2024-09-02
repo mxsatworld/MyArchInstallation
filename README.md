@@ -48,8 +48,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     
     #mount partitions
     mount /dev/sda3 /mnt 
-    mkdir /mnt/boot
-    mount /dev/sda1 /mnt/boot 
+    mount --mkdir /dev/sda1 /mnt/boot 
     swapon /dev/sda2
 
     #search mirrors
@@ -66,9 +65,6 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     
     #enter the root system
     arch-chroot /mnt
-    
-    #get mirrors
-    reflector --download-timeout 60 --country Argentina,Brazil,Chile --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
     #set date
     ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
@@ -122,8 +118,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
 ```
 #restore backuped files
 lsblk
-mkdir ~/usb
-sudo mount /dev/sdb ~/usb
+sudo mount --mkdir /dev/sdb ~/usb
 cp ~/usb/ ~
 sudo umount ~/usb
 #unplug usb
