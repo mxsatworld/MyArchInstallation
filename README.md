@@ -103,7 +103,7 @@ NOTE!!!: TO VERIFY THE ISO IMAGE IT MUST BE FULLY DOWNLOADED
     #install grub
     grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot
 
-    #edit timeout of grub to 1 second
+    #edit timeout of grub to 0 second
     nvim /etc/default/grub
 
     #make grub config
@@ -161,7 +161,14 @@ systemctl enable cups.service
 systemctl enable lightdm
 ```
 10. reboot
-11. config printer with http://localhost:631/admin 
+11. config printer with http://localhost:631/admin
+    ```
+    # see URI of the printer
+    lpinfo -v
+
+    # set default printer
+    lpoptions -d HPAguas
+    ```
 12. AUR (opera)
 
 ## Sources
