@@ -169,7 +169,7 @@ systemctl enable lightdm
     # set default printer
     lpoptions -d HPAguas
     ```
-12. AUR (opera)
+12. AUR (opera)(opera-ffmpeg-codecs)
 
 ## Sources
 1. archlinux.org
