@@ -159,6 +159,9 @@ sudo nvim /etc/modules-load.d/btusb.conf
 systemctl enable bluetooth
 systemctl enable cups.service
 systemctl enable lightdm
+
+install yay
+yay -S caffeine-ng
 ```
 10. reboot
 11. config printer with http://localhost:631/admin
@@ -169,7 +172,6 @@ systemctl enable lightdm
     # set default printer
     lpoptions -d HPAguas
     ```
-12. install yay caffeine-ng 
 
 ## Sources
 1. archlinux.org
