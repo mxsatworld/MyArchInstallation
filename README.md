@@ -131,7 +131,7 @@ reboot
 nmcli dev wifi list
 sudo nmcli --ask dev wifi connect "$1"
 #unplug cellphone
-sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock tmux git lightdm lightdm-gtk-greeter thunar gvfs vlc zvbi
+sudo pacman -S xorg xorg-xinit i3 xfce4-terminal firefox dmenu keepassxc alsa-utils pulseaudio htop brightnessctl xclip maim libreoffice lxappearance arc-gtk-theme bluez bluez-utils pulseaudio-bluetooth cups cups-pdf usbutils openssh hplip xss-lock tmux git lightdm lightdm-gtk-greeter thunar gvfs vlc zvbi xdotool
 
 #start X
 nvim ~/.xinitrc
@@ -169,6 +169,7 @@ systemctl enable lightdm
     # set default printer
     lpoptions -d HPAguas
     ```
+12. install yay caffeine-ng 
 
 ## Sources
 1. archlinux.org
