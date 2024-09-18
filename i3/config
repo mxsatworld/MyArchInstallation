@@ -12,9 +12,9 @@ mode "mouse" {
 	# Mouse movement (slow/fine-tuned) -- vim keybindings
 
 	bindsym h exec xdotool mousemove_relative -- -$slow 0
-	bindsym j exec xdotool mousemove_relative 0 $fast
-	bindsym k exec xdotool mousemove_relative -- 0 -$fast
-	bindsym l exec xdotool mousemove_relative $fast 0
+	bindsym j exec xdotool mousemove_relative 0 $slow
+	bindsym k exec xdotool mousemove_relative -- 0 -$slow
+	bindsym l exec xdotool mousemove_relative $slow 0
 
 	# Mouse movement (slow/fine-tuned) -- arrow keys
 
