@@ -8,6 +8,9 @@
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias vim='nvim'
+alias poweroff='loginctl poweroff'
+alias reboot='loginctl reboot'
+alias thunar='dbus-launch thunar'
 PS1='[\u@\h \W]\$ '
 
 function wifiList() {
